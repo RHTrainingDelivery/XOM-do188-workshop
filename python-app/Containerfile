@@ -1,0 +1,14 @@
+FROM registry.redhat.io/rhel9/python-312
+
+#To debug, change the env variable from the container to FLASK_DEBUG=1
+ENV FLASK_DEBUG=0
+
+ADD app.py /opt/app-root
+
+WORKDIR /opt/app-root
+
+# Install debugpy to integrate with VSCode
+# https://github.com/kartikpuri95/flask-vscode-debug
+RUN pip3 install Flask debugpy
+
+CMD flask run --host=0.0.0.0
