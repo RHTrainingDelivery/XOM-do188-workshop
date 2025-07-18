@@ -30,3 +30,6 @@ def disp(num):
 if __name__ == '__main__':
 
     app.run()
+    
+#To run on uv:
+# uv run flask -A app run --debug --host 0.0.0.0

@@ -1,14 +1,23 @@
 FROM registry.redhat.io/rhel9/python-312
 
-#To debug, change the env variable from the container to FLASK_DEBUG=1
-ENV FLASK_DEBUG=0
+#Needed to remove warning about frozen modules
+ENV PYDEVD_DISABLE_FILE_VALIDATION=1
+
+EXPOSE 5678 5000
 
 ADD app.py /opt/app-root
+ADD requirements.txt /opt/app-root
 
 WORKDIR /opt/app-root
 
-# Install debugpy to integrate with VSCode
-# https://github.com/kartikpuri95/flask-vscode-debug
-RUN pip3 install Flask debugpy
+# Install dependencies
+RUN pip install -r requirements.txt
 
-CMD flask run --host=0.0.0.0
+
+CMD flask run --host 0.0.0.0
+# To configure debugging using remote facility we could change the previous command to: 
+# pip install debugpy -t /tmp && \
+#    python /tmp/debugpy --listen 0.0.0.0:5678 --wait-for-client -m flask run --host=0.0.0.0
+# However we are burying the debugpy module into the container.
+# Instead, it is better to run the container:
+# podman run -p 5000:5000 -p 5678:5678 quay.io/rhn-gls-rtaniguchi/python-app sh -c 'pip install debugpy -t /tmp && python /tmp/debugpy --listen 0.0.0.0:5678 --wait-for-client -m flask run --host=0.0.0.0'
