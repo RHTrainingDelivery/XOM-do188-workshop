@@ -266,5 +266,6 @@ services:
     depends_on:
       <<: *airflow-common-depends-on
 
+
 volumes:
   postgres-db-volume:
