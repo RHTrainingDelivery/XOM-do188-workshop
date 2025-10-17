@@ -1,6 +1,6 @@
 cat Containerfile
 
-podman login registry.access.redhat.com:8443
+podman login registry.ocp4.example.com:8443
 
 podman build -t nodebug .
 
